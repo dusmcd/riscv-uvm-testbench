@@ -1,0 +1,78 @@
+# Current time Wed Nov 11 08:50:59 2026
+# Program = vsim
+# Id = "2020.1"
+# Version = "2020.01"
+# Date = "Jan 28 2020"
+# Platform = "linux_x86_64"
+# Signature = 96579580b54a2c95e9deb21acf1d4e2f
+# 0    0x00007feff21318c8: 'random_tester.sv:8'
+# 1    0x00007feff213a7ad: 'random_test.sv:13'
+# 2    0x00007feff1ca4fb8: '/usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_common_phases.svh:54'
+# 3    0x00007feff1ca2ce4: '/usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_topdown_phase.svh:111'
+# 4    0x00007feff1ca2178: '/usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_topdown_phase.svh:78'
+# 5    0x00007feff1ca265d: '/usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_topdown_phase.svh:95'
+# 6    0x00007feff1c9277f: '/usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_phase.svh:1156'
+# 7    0x00007feff1c9161a: '/usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_phase.svh:1847'
+# 8    0x00000000011ad29a: '<unknown (@0x11ad29a)>'
+# 9    0x000000000065345c: '<unknown (@0x65345c)>'
+# 10   0x00000000004f4724: '<unknown (@0x4f4724)>'
+# 11   0x0000000000691493: '<unknown (@0x691493)>'
+# 12   0x0000000000bc8ea3: '<unknown (@0xbc8ea3)>'
+# 13   0x0000000000bcde0b: '<unknown (@0xbcde0b)>'
+# 14   0x0000000000bcfb3e: '<unknown (@0xbcfb3e)>'
+# 15   0x0000000000e9a4cd: '<unknown (@0xe9a4cd)>'
+# 16   0x0000000001615c3d: '<unknown (@0x1615c3d)>'
+# 17   0x000000000161a096: '<unknown (@0x161a096)>'
+# 18   0x000000000161b781: '<unknown (@0x161b781)>'
+# 19   0x000000000161bae6: '<unknown (@0x161bae6)>'
+# 20   0x00000000010ebd49: '<unknown (@0x10ebd49)>'
+# 21   0x00000000016bb9ef: '<unknown (@0x16bb9ef)>'
+# 22   0x000000000170f557: '<unknown (@0x170f557)>'
+# 23   0x00000000016d2457: '<unknown (@0x16d2457)>'
+# 24   0x00000000016d2739: '<unknown (@0x16d2739)>'
+# 25   0x00000000014c9a0d: '<unknown (@0x14c9a0d)>'
+# 26   0x0000000000b991fc: '<unknown (@0xb991fc)>'
+# End of Stack Trace
+
+
+# Current time Wed Nov 11 08:53:05 2026
+# Program = vsim
+# Id = "2020.1"
+# Version = "2020.01"
+# Date = "Jan 28 2020"
+# Platform = "linux_x86_64"
+# Signature = 96579580b54a2c95e9deb21acf1d4e2f
+# 0    0x00007feff2136c0e: 'coverage.sv:29'
+# 1    0x00007feff2136d46: '<unknown (@0x7feff2136d46)>'
+# 2    0x0000000000657e9b: '<unknown (@0x657e9b)>'
+# 3    0x00007feff2136092: 'coverage.sv:4'
+# 4    0x00007feff213488b: 'coverage.sv:35'
+# 5    0x00007feff213a961: 'random_test.sv:14'
+# 6    0x00007feff1ca5048: '/usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_common_phases.svh:54'
+# 7    0x00007feff1ca2d74: '/usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_topdown_phase.svh:111'
+# 8    0x00007feff1ca2208: '/usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_topdown_phase.svh:78'
+# 9    0x00007feff1ca26ed: '/usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_topdown_phase.svh:95'
+# 10   0x00007feff1c9280f: '/usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_phase.svh:1156'
+# 11   0x00007feff1c916aa: '/usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_phase.svh:1847'
+# 12   0x00000000011ad29a: '<unknown (@0x11ad29a)>'
+# 13   0x000000000065345c: '<unknown (@0x65345c)>'
+# 14   0x00000000004f4724: '<unknown (@0x4f4724)>'
+# 15   0x0000000000691493: '<unknown (@0x691493)>'
+# 16   0x0000000000bc8ea3: '<unknown (@0xbc8ea3)>'
+# 17   0x0000000000bcde0b: '<unknown (@0xbcde0b)>'
+# 18   0x0000000000bcfb3e: '<unknown (@0xbcfb3e)>'
+# 19   0x0000000000e9a4cd: '<unknown (@0xe9a4cd)>'
+# 20   0x0000000001615c3d: '<unknown (@0x1615c3d)>'
+# 21   0x000000000161a096: '<unknown (@0x161a096)>'
+# 22   0x000000000161b781: '<unknown (@0x161b781)>'
+# 23   0x000000000161bae6: '<unknown (@0x161bae6)>'
+# 24   0x00000000010ebd49: '<unknown (@0x10ebd49)>'
+# 25   0x00000000016bb9ef: '<unknown (@0x16bb9ef)>'
+# 26   0x000000000170f557: '<unknown (@0x170f557)>'
+# 27   0x00000000016d2457: '<unknown (@0x16d2457)>'
+# 28   0x00000000016d2739: '<unknown (@0x16d2739)>'
+# 29   0x00000000014c9a0d: '<unknown (@0x14c9a0d)>'
+# 30   0x0000000000b991fc: '<unknown (@0xb991fc)>'
+# End of Stack Trace
+
+

@@ -7,7 +7,6 @@ class random_test extends uvm_test;
 
   function new (string name, uvm_component parent);
     super.new(name, parent);
-    bfm.num_instructions = 100;
   endfunction
 
   function void build_phase(uvm_phase phase);

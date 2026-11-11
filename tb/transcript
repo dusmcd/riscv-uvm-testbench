@@ -1,6 +1,6 @@
-# vsim -c work.simtop "+UVM_TESTNAME=raw_test" -do "run -all" 
-# Start time: 13:07:56 on Nov 09,2026
-# ** Note: (vsim-8009) Loading existing optimized design _opt1
+# vsim -c work.simtop "+UVM_TESTNAME=random_test" -do "run -all" 
+# Start time: 09:14:04 on Nov 11,2026
+# ** Note: (vsim-8009) Loading existing optimized design _opt
 # //  Questa Sim-64
 # //  Version 2020.1 linux_x86_64 Jan 28 2020
 # //
@@ -47,140 +47,141 @@
 # 
 # UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
 # UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
-# UVM_INFO @ 0: reporter [RNTST] Running test raw_test...
-# calling overriden generate_instruction task
+# UVM_INFO @ 0: reporter [RNTST] Running test random_test...
 # instruction not supported for display right now
-# ADDI x 1, x 0, 1034
-# ADDI x 2, x 0, 2278
-# ADDI x 3, x 0,  564
-# ADDI x 4, x 0, 2241
-# ADDI x 5, x 0, 3035
-# ADDI x 6, x 0,   27
-# ADDI x 7, x 0, 1184
-# ADDI x 8, x 0, 2587
-# ADDI x 9, x 0, 2105
-# ADDI x10, x 0, 3985
-# ADDI x11, x 0,   42
-# ADDI x12, x 0, 2902
-# ADDI x13, x 0, 3610
-# ADDI x14, x 0, 3515
-# ADDI x15, x 0, 2225
-# ADDI x16, x 0, 3823
-# ADDI x17, x 0, 2223
-# ADDI x18, x 0, 1958
-# ADDI x19, x 0, 1101
-# ADDI x20, x 0, 1192
-# ADDI x21, x 0, 2248
-# ADDI x22, x 0,  400
-# ADDI x23, x 0, 4041
-# ADDI x24, x 0, 2319
-# ADDI x25, x 0, 2159
-# ADDI x26, x 0, 3142
-# ADDI x27, x 0, 3434
-# ADDI x28, x 0, 1231
-# ADDI x29, x 0, 1038
-# ADDI x30, x 0, 3467
-# ADDI x31, x 0, 2628
+# ADDI x 1, x 0, 3041
+# ADDI x 2, x 0,  744
+# ADDI x 3, x 0, 2706
+# ADDI x 4, x 0, 2742
+# ADDI x 5, x 0, 1147
+# ADDI x 6, x 0, 2219
+# ADDI x 7, x 0, 3459
+# ADDI x 8, x 0, 3652
+# ADDI x 9, x 0, 4055
+# ADDI x10, x 0,  925
+# ADDI x11, x 0, 1236
+# ADDI x12, x 0, 2443
+# ADDI x13, x 0, 1879
+# ADDI x14, x 0, 2460
+# ADDI x15, x 0, 2954
+# ADDI x16, x 0, 1551
+# ADDI x17, x 0, 1855
+# ADDI x18, x 0, 3650
+# ADDI x19, x 0, 1014
+# ADDI x20, x 0, 4063
+# ADDI x21, x 0,  732
+# ADDI x22, x 0, 1745
+# ADDI x23, x 0, 1535
+# ADDI x24, x 0, 2597
+# ADDI x25, x 0, 1948
+# ADDI x26, x 0, 2238
+# ADDI x27, x 0,  603
+# ADDI x28, x 0,    2
+# ADDI x29, x 0, 1544
+# ADDI x30, x 0,  947
+# ADDI x31, x 0, 3701
+# XOR x 2, x 6, x 3
+# MULH x 3, x 2, x 9
 # instruction not supported for display right now
-# XORI x21, x28,  907
-# SRL x27, x21, x12
-# MUL x11, x27, x23
-# SUB x20, x11, x20
+# ADD x 2, x 9, x15
+# SRL x 9, x 4, x15
+# SRAI x 1, x17, 1033
+# SLT x18, x15, x21
+# XORI x31, x 2, 3249
+# SLT x11, x14, x14
+# AND x 1, x 7, x 1
+# MULH x11, x12, x10
+# OR x 7, x20, x30
+# SLT x19, x19, x12
+# SRAI x26, x10, 1032
+# SLL x 1, x11, x 1
+# MULH x 2, x15, x16
+# SLTU x 4, x21, x15
+# SLTU x17, x28, x28
+# SRLI x 8, x18,   10
+# MUL x18, x25, x 7
+# XORI x16, x15, 2804
 # instruction not supported for display right now
-# SRA x 2, x11, x 2
-# SLTU x 9, x 2, x16
-# OR x27, x 9, x24
-# AND x10, x27, x 4
-# XOR x19, x10, x 6
-# ANDI x14, x19, 2672
-# SRAI x 8, x14, 1031
-# AND x16, x 8, x15
-# SLL x 5, x16, x30
-# MULH x22, x 5, x30
-# SRAI x15, x22, 1045
-# SLT x 9, x15, x31
+# SLTU x23, x20, x19
+# MULHU x18, x 4, x 5
+# ORI x 7, x21, 2537
+# AND x31, x20, x11
+# XOR x21, x 8, x15
+# instruction not supported for display right now
+# instruction not supported for display right now
+# ADD x26, x27, x 0
+# ADDI x12, x 7,  295
+# XOR x 8, x24, x15
+# SLLI x12, x 3,   14
+# XOR x20, x16, x13
+# SLL x 7, x 3, x 8
+# ANDI x 8, x28, 3922
+# XORI x 5, x 6, 1901
+# ADDI x10, x 4, 3562
 # ADDI x 0, x 0,    0
-# ORI x 9, x30, 2952
-# MUL x31, x 9, x12
-# SRAI x19, x31, 1028
+# AND x 4, x19, x 2
+# SRAI x 3, x11, 1027
+# SLL x30, x18, x22
+# SUB x27, x12, x 6
+# AND x29, x20, x27
+# ORI x 5, x 0, 3572
+# SLL x13, x29, x 2
+# MUL x23, x10, x16
+# MULHU x 9, x 9, x26
+# SRLI x11, x28,    7
+# SRA x 8, x28, x 2
+# XOR x28, x29, x 0
 # instruction not supported for display right now
-# MUL x23, x 6, x13
-# SLLI x28, x23,   12
-# instruction not supported for display right now
-# SLTU x 9, x11, x19
-# ORI x29, x 9, 2797
-# SLL x13, x29, x12
-# SRAI x 1, x13, 1047
-# XOR x24, x 1, x14
-# MUL x 8, x24, x 5
-# SLLI x11, x 8,   15
-# XOR x19, x11, x12
-# ORI x 8, x19,  731
-# MUL x 9, x 8, x 9
-# XORI x22, x 9, 2161
-# SRLI x17, x22,   11
-# SLT x15, x17, x27
-# SRL x22, x15, x29
-# MULHU x13, x22, x28
-# SRL x 9, x13, x17
-# SRLI x24, x 9,   15
-# SRA x12, x24, x10
-# MULH x28, x12, x 5
-# MULH x13, x28, x 0
-# SLL x17, x13, x 5
-# instruction not supported for display right now
+# MUL x11, x 9, x20
+# SRA x 4, x14, x27
+# ** Error: destination register incorrect. expected=ffffffff got=fffff99c for instruction=41b75233
+#    Time: 875 ns  Scope: cpu_test_pkg.scoreboard.run_phase File: scoreboard.sv Line: 24
+# ADD x31, x16, x 3
+# XOR x14, x 2, x17
+# MULHU x 5, x 7, x 6
+# SUB x23, x18, x20
+# OR x25, x 2, x 1
 # ADDI x 0, x 0,    0
-# SLTU x24, x11, x18
-# MULH x15, x24, x25
-# SRAI x30, x15, 1025
-# SRLI x25, x30,    6
-# SRA x14, x25, x 9
-# XOR x 3, x14, x10
-# AND x10, x 3, x26
-# XOR x20, x10, x 0
-# ORI x 6, x20,  486
+# SRLI x 4, x 0,   31
+# MULHU x16, x 6, x30
+# MULHU x 5, x26, x 8
+# ANDI x29, x13, 2654
+# AND x25, x14, x14
+# SRAI x 5, x 7, 1032
+# MULHU x 1, x 5, x19
+# AND x17, x26, x27
 # instruction not supported for display right now
-# SLT x20, x20, x 6
-# SLTU x19, x20, x10
-# ADD x 8, x19, x 7
-# SRAI x31, x 8, 1025
-# ADDI x12, x31, 2244
-# SUB x25, x12, x 8
-# SRL x30, x25, x20
-# MULH x27, x30, x 2
-# XORI x 9, x27,  580
-# SRLI x 9, x 9,    9
-# XORI x28, x 9, 2647
-# SLTU x 4, x28, x 9
-# ADD x24, x 4, x28
-# ADDI x 1, x24, 4089
-# SRL x31, x 1, x22
-# SLT x29, x31, x11
-# ANDI x29, x29, 2679
-# AND x 5, x29, x 4
-# XOR x24, x 5, x18
-# SRAI x31, x24, 1037
-# MULH x26, x31, x31
+# ADDI x31, x26, 1755
+# SUB x 2, x 6, x14
+# ADD x 5, x24, x30
+# MULHU x 4, x 5, x 9
 # ADDI x 0, x 0,    0
-# ANDI x24, x 5,  772
-# OR x16, x24, x18
-# MULHU x 1, x16, x28
+# SRL x11, x15, x26
+# OR x 9, x 0, x 4
+# ADD x20, x30, x 2
+# ADDI x23, x18, 1955
+# SLLI x 2, x16,   26
+# SRL x 1, x 0, x12
+# ADDI x21, x 0, 3380
+# ORI x28, x20, 2326
+# MULHU x16, x26, x14
+# SRA x25, x 8, x12
+# SLTU x15, x20, x 9
+# MUL x 6, x 3, x22
+# SLL x29, x17, x 2
 # ADDI x 0, x 0,    0
-# AND x24, x16, x25
+# AND x 9, x12, x19
+# ADDI x19, x13, 1283
+# XORI x 4, x21, 1973
+# SLL x16, x 1, x14
+# OR x 7, x20, x12
+# SLL x29, x28, x30
+# OR x29, x20, x 2
+# XOR x12, x12, x 2
+# SLL x31, x21, x21
+# SLLI x 4, x23,   16
 # instruction not supported for display right now
-# ADD x 9, x 3, x25
-# MUL x17, x 9, x 2
-# SLT x 7, x17, x 2
-# MULHU x23, x 7, x27
-# ANDI x14, x23, 1040
-# SLT x26, x14, x29
-# SRA x16, x26, x24
-# SRA x24, x16, x25
-# ANDI x20, x24, 3001
-# ORI x25, x20, 1030
-# SRL x18, x25, x20
-# SRL x 3, x18, x 3
-# SRLI x30, x 3,   10
+# XORI x10, x30, 2605
 # Coverage = 100.00 %
 # UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 3930: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
 # 
@@ -196,6 +197,6 @@
 # [RNTST]     1
 # [TEST_DONE]     1
 # ** Note: $finish    : /usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
-#    Time: 3930 ns  Iteration: 55  Instance: /simtop
-# End time: 13:07:56 on Nov 09,2026, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 0
+#    Time: 3930 ns  Iteration: 57  Instance: /simtop
+# End time: 09:14:05 on Nov 11,2026, Elapsed time: 0:00:01
+# Errors: 1, Warnings: 0
