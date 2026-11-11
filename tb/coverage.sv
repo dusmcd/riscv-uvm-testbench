@@ -1,7 +1,9 @@
 class coverage extends uvm_component;
   `uvm_component_utils(coverage);
+
+  local instr_t instr;
   // ensure that all instructions have been executed
-  covergroup cg with function sample(instr_t instr);
+  covergroup cg;
     coverpoint instr {
       bins add = {ADD};
       bins sub = {SUB};
@@ -47,7 +49,8 @@ class coverage extends uvm_component;
     fork
       forever begin
         @(negedge bfm.clk);
-        cg.sample(bfm.instr);
+        instr = bfm.instr;
+        cg.sample();
       end
     join_none
 
