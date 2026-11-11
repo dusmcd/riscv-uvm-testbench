@@ -1,33 +1,19 @@
 class random_test extends uvm_test;
   `uvm_component_utils(random_test);
 
-  virtual interface cpu_bfm bfm;
+  local random_tester tester_i;
+  coverage coverage_i;
+  scoreboard scoreboard_i;
 
   function new (string name, uvm_component parent);
     super.new(name, parent);
-    if (!uvm_config_db #(virtual interface cpu_bfm)::get(null, "*", "bfm", bfm))
-      $fatal("Failed to get BFM");
+    bfm.num_instructions = 100;
   endfunction
 
-  task run_phase(uvm_phase phase);
-    random_tester random_tester_i;
-    coverage coverage_i;
-    scoreboard scoreboard_i;
-
-    phase.raise_objection(this);
-
-    random_tester_i = new(bfm);
-    coverage_i = new (bfm);
-    scoreboard_i = new (bfm);
-
-    fork
-      coverage_i.execute();
-      scoreboard_i.execute();
-    join_none
-
-    random_tester_i.execute(100);
-    phase.drop_objection(this);
-
-  endtask
+  function void build_phase(uvm_phase phase);
+    tester_i = new("tester_i", this);
+    coverage_i = new ("coverage_i", this);
+    scoreboard_i = new ("scoreboard_i", this);
+  endfunction
 
 endclass

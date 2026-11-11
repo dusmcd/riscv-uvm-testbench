@@ -1,10 +1,16 @@
-class random_tester;
+class random_tester extends uvm_component;
+  `uvm_component_utils(random_tester);
   virtual cpu_bfm bfm;
   CPUInstruction cpu_instr;
  
-  function new(virtual cpu_bfm b);
-    this.bfm = b;
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
     cpu_instr = new();
+  endfunction
+
+  function void build_phase(uvm_phase phase);
+    if (!uvm_config_db #(virtual cpu_bfm bfm)::get(null, "*", "bfm", bfm))
+      $fatal("Failed to get BFM");
   endfunction
 
   protected virtual task generate_instructions(int num_instructions);
@@ -29,8 +35,8 @@ class random_tester;
   endtask
 
   
-  task execute(int num_instructions);
-    generate_instructions(num_instructions);
+  task run_phase(uvm_phase phase);
+    generate_instructions(bfm.num_instructions);
     pipeline();
     bfm.reset_cpu();
     repeat((31 + num_instructions) * 3) @(negedge bfm.clk);

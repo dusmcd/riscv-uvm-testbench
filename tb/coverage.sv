@@ -1,4 +1,5 @@
-class coverage;
+class coverage extends uvm_component;
+  `uvm_component_utils(coverage);
   // ensure that all instructions have been executed
   covergroup cg @(posedge bfm.clk);
     coverpoint bfm.instr {
@@ -29,14 +30,21 @@ class coverage;
 
   virtual cpu_bfm bfm;
 
-  function new(virtual cpu_bfm bfm);
-    this.bfm = bfm;
+  function new(string name, uvm_component parent);
+    super.new(name, parent):
     cg = new();
   endfunction
 
-  task execute();
+  function void build_phase(uvm_phase phase);
+    if (!uvm_config_db #(cpu_bfm bfm)::get(null, "*", "bfm", bfm))
+      $fatal("Failed to get BFM");
+  endfunction
+
+  task run_phase(uvm_phase phase);
+    phase.raise_objection(this);
     wait(bfm.done);
     $display("Coverage = %.2f %%", cg.get_inst_coverage());
+    phase.drop_objection(this);
   endtask
 
 

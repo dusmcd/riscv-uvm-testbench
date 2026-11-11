@@ -1,14 +1,19 @@
-class scoreboard;
+class scoreboard extends uvm_component;
+  `uvm_component_utils(scoreboard);
   CPUReferenceModel ref_model;
   virtual cpu_bfm bfm;
 
-  function new(virtual cpu_bfm bfm);
-    this.bfm = bfm;
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
     this.ref_model = new();
   endfunction
 
-  task execute();
-    int clock_num = 0;
+  function void build_phase(uvm_phase phase);
+    if (!uvm_config_db #(virtual cpu_bfm)::get(null, "*", "bfm", bfm))
+        $fatal("Failed to get BFM");
+  endfunction
+
+  task run_phase(uvm_phase phase);
     forever begin 
       @(posedge bfm.clk)
 

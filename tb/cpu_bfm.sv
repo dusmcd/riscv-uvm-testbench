@@ -17,6 +17,7 @@ interface cpu_bfm(
   bit done;
   bit load_instr_request = 0;
   bit load_instr_done = 0;
+  int num_instructions;
 
   // drive clock
   initial begin
