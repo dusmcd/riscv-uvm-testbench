@@ -19,10 +19,20 @@ class scoreboard extends uvm_component;
 
       if (bfm.valid_WB && !$isunknown(bfm.instruction_WB)) begin
         // check reference model against DUT 
-        ref_model.decode_and_execute(bfm.instruction_WB, bfm.instr, bfm.expected);
+        ref_model.decode_and_execute(bfm.instruction_WB, bfm.PC_WB, bfm.instr, bfm.expected);
         if (bfm.writedata_WB != bfm.expected) begin
           $error("destination register incorrect. expected=%h got=%h for instruction=%h", bfm.expected, bfm.writedata_WB, bfm.instruction_WB);
         end
+
+        case (bfm.pcsrc_WB)
+          2'd1: begin
+            if (bfm.jal_addr_WB != ref_model.pc) begin
+              $error("PC incorrect. expected=%h got=%h for instruction=%h", ref_model.pc, bfm.jal_addr_WB, bfm.instruction_WB); 
+            end
+          end
+          default:;
+        endcase
+          
       end
     end 
   endtask

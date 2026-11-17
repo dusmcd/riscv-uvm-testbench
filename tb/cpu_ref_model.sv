@@ -1,8 +1,8 @@
-typedef enum int {RTYPE, ITYPE, UTYPE, NA} instr_types;
+typedef enum int {RTYPE, ITYPE, UTYPE, JTYPE, NA} instr_types;
 
 class CPUReferenceModel;
   logic [31:0] registers[32];
-  logic [12:0] pc;
+  logic [11:0] pc;
 
   function new();
     foreach (registers[i])
@@ -10,6 +10,86 @@ class CPUReferenceModel;
 
     pc = 12'b0;
   endfunction
+
+  function automatic void decode_and_execute(
+    input logic [31:0] instruction,
+    input logic [11:0] PC_WB,
+    output instr_t instr_out,
+    output logic [31:0] write_data
+  );
+    logic [4:0] rs1;
+    logic [4:0] rs2;
+    logic [4:0] rd;
+    logic [11:0] imm;
+    logic [19:0] imm_u;
+    instr_t instr;
+
+    rs1 = instruction[19:15];
+    rs2 = instruction[24:20];
+    rd = instruction[11:7];
+    imm = instruction[31:20];
+    imm_u = instruction[31:12];
+    instr = NOOP;
+    pc = PC_WB + 12'b1; // default value if no branch taken or no jump instruction
+
+    case (instruction[6:0])
+      7'b0110011: begin
+        // R-type integer and multiply instructions.
+        case ({instruction[31:25], instruction[14:12]})
+          {7'b0000000, 3'b000}: instr = ADD;
+          {7'b0100000, 3'b000}: instr = SUB;
+          {7'b0000000, 3'b111}: instr = AND;
+          {7'b0000000, 3'b110}: instr = OR;
+          {7'b0000000, 3'b100}: instr = XOR;
+          {7'b0000000, 3'b001}: instr = SLL;
+          {7'b0100000, 3'b101}: instr = SRA;
+          {7'b0000000, 3'b101}: instr = SRL;
+          {7'b0000000, 3'b010}: instr = SLT;
+          {7'b0000000, 3'b011}: instr = SLTU;
+          {7'b0000001, 3'b000}: instr = MUL;
+          {7'b0000001, 3'b001}: instr = MULH;
+          {7'b0000001, 3'b011}: instr = MULHU;
+          default: instr = NOOP;
+        endcase
+      end
+      7'b0010011: begin
+        // I-type integer instructions.
+        case (instruction[14:12])
+          3'b000: instr = ADDI;
+          3'b111: instr = ANDI;
+          3'b110: instr = ORI;
+          3'b100: instr = XORI;
+          3'b001: begin
+            if (instruction[31:25] == 7'b0000000)
+              instr = SLLI;
+          end
+          3'b101: begin
+            if (instruction[31:25] == 7'b0100000)
+              instr = SRAI;
+            else if (instruction[31:25] == 7'b0000000)
+              instr = SRLI;
+          end
+          default: instr = NOOP;
+        endcase
+      end
+      7'b1110011: begin
+        // Register form of CSR read/write.
+        if (instruction[14:12] == 3'b001)
+          instr = CSRRW;
+      end
+      7'b0110111: begin
+        // U-type load upper immediate.
+        instr = LUI;
+      end
+      7'b1101111: begin
+        instr = JAL;
+      end
+      default: instr = NOOP;
+    endcase
+
+    execute_instruction(instr, rs1, rs2, rd, imm, imm_u, PC_WB, instr_out, write_data);
+  endfunction
+
 
   local function automatic void print_instr(
     input instr_t instr,
@@ -27,6 +107,9 @@ class CPUReferenceModel;
       ITYPE: begin
         $display("%s x%d, x%d, %d", instr.name(), rd, rs1, imm);
       end
+      JTYPE: begin
+        $display("%s x%d, %h", instr.name(), rd, imm_u);
+      end
       default: $display("instruction not supported for display right now");
     endcase
 
@@ -39,6 +122,7 @@ class CPUReferenceModel;
     input logic [4:0] rd,
     input logic [11:0] imm,
     input logic [19:0] imm_u,
+    input logic [11:0] PC_WB,
     output instr_t instr_out,
     output logic [31:0] write_data
     );
@@ -128,6 +212,10 @@ class CPUReferenceModel;
         instr_type = ITYPE;
       end
       LUI: lui(imm_u, rd);
+      JAL: begin
+        jal(imm_u, rd, PC_WB);
+        instr_type = JTYPE;
+      end
       NOOP: ;
     endcase
 
@@ -137,78 +225,10 @@ class CPUReferenceModel;
     print_instr(instr, instr_type, rs1, rs2, rd, imm, imm_u);
   endfunction
 
-  function automatic void decode_and_execute(
-    input logic [31:0] instruction,
-    output instr_t instr_out,
-    output logic [31:0] write_data
-  );
-    logic [4:0] rs1;
-    logic [4:0] rs2;
-    logic [4:0] rd;
-    logic [11:0] imm;
-    logic [19:0] imm_u;
-    instr_t instr;
-
-    rs1 = instruction[19:15];
-    rs2 = instruction[24:20];
-    rd = instruction[11:7];
-    imm = instruction[31:20];
-    imm_u = instruction[31:12];
-    instr = NOOP;
-
-    case (instruction[6:0])
-      7'b0110011: begin
-        // R-type integer and multiply instructions.
-        case ({instruction[31:25], instruction[14:12]})
-          {7'b0000000, 3'b000}: instr = ADD;
-          {7'b0100000, 3'b000}: instr = SUB;
-          {7'b0000000, 3'b111}: instr = AND;
-          {7'b0000000, 3'b110}: instr = OR;
-          {7'b0000000, 3'b100}: instr = XOR;
-          {7'b0000000, 3'b001}: instr = SLL;
-          {7'b0100000, 3'b101}: instr = SRA;
-          {7'b0000000, 3'b101}: instr = SRL;
-          {7'b0000000, 3'b010}: instr = SLT;
-          {7'b0000000, 3'b011}: instr = SLTU;
-          {7'b0000001, 3'b000}: instr = MUL;
-          {7'b0000001, 3'b001}: instr = MULH;
-          {7'b0000001, 3'b011}: instr = MULHU;
-          default: instr = NOOP;
-        endcase
-      end
-      7'b0010011: begin
-        // I-type integer instructions.
-        case (instruction[14:12])
-          3'b000: instr = ADDI;
-          3'b111: instr = ANDI;
-          3'b110: instr = ORI;
-          3'b100: instr = XORI;
-          3'b001: begin
-            if (instruction[31:25] == 7'b0000000)
-              instr = SLLI;
-          end
-          3'b101: begin
-            if (instruction[31:25] == 7'b0100000)
-              instr = SRAI;
-            else if (instruction[31:25] == 7'b0000000)
-              instr = SRLI;
-          end
-          default: instr = NOOP;
-        endcase
-      end
-      7'b1110011: begin
-        // Register form of CSR read/write.
-        if (instruction[14:12] == 3'b001)
-          instr = CSRRW;
-      end
-      7'b0110111: begin
-        // U-type load upper immediate.
-        instr = LUI;
-      end
-      default: instr = NOOP;
-    endcase
-
-    execute_instruction(instr, rs1, rs2, rd, imm, imm_u, instr_out, write_data);
+  function automatic void jal(input logic [19:0] imm_u, input logic [4:0] rd, input logic [11:0] PC_WB);
+    logic [20:0] jal_offset = {imm_u[19], imm_u[7:0], imm_u[8], imm_u[18:9], 1'b0};
+    pc = PC_WB + jal_offset[13:2];
+    registers[rd] = {20'b0, PC_WB + 12'b1};
   endfunction
 
   function automatic void add(input logic[4:0] rs1, rs2, rd);

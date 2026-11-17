@@ -7,7 +7,9 @@ module simtop;
   cpu_bfm bfm(
 		.dut_instruction_EX(dut.cpu.instruction_EX),
     .dut_writedata_WB(dut.cpu.writedata_WB),
-    .dut_PC_EX(dut.cpu.PC_EX)
+    .dut_PC_EX(dut.cpu.PC_EX),
+    .dut_jal_addr_EX(dut.cpu.jal_addr_EX),
+    .dut_pcsrc_EX(dut.cpu.pcsrc_EX)
 	);
 	top dut
 	(

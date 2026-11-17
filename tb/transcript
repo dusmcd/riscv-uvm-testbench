@@ -1,5 +1,5 @@
-# vsim -c work.simtop "+UVM_TESTNAME=random_test" -do "run -all" 
-# Start time: 09:14:04 on Nov 11,2026
+# vsim -c work.simtop "+UVM_TESTNAME=random_test" -do "run -all; coverage report -cvg -details -zeros -output uncovered.txt" 
+# Start time: 13:31:07 on Nov 17,2026
 # ** Note: (vsim-8009) Loading existing optimized design _opt
 # //  Questa Sim-64
 # //  Version 2020.1 linux_x86_64 Jan 28 2020
@@ -99,7 +99,7 @@
 # SLTU x 4, x21, x15
 # SLTU x17, x28, x28
 # SRLI x 8, x18,   10
-# MUL x18, x25, x 7
+# ADDI x 0, x 0,    0
 # XORI x16, x15, 2804
 # instruction not supported for display right now
 # SLTU x23, x20, x19
@@ -118,72 +118,31 @@
 # ANDI x 8, x28, 3922
 # XORI x 5, x 6, 1901
 # ADDI x10, x 4, 3562
-# ADDI x 0, x 0,    0
+# JAL x15, 22000
 # AND x 4, x19, x 2
-# SRAI x 3, x11, 1027
-# SLL x30, x18, x22
-# SUB x27, x12, x 6
-# AND x29, x20, x27
-# ORI x 5, x 0, 3572
-# SLL x13, x29, x 2
-# MUL x23, x10, x16
-# MULHU x 9, x 9, x26
-# SRLI x11, x28,    7
-# SRA x 8, x28, x 2
-# XOR x28, x29, x 0
+# SRA x 1, x 4, x21
 # instruction not supported for display right now
-# MUL x11, x 9, x20
-# SRA x 4, x14, x27
-# ** Error: destination register incorrect. expected=ffffffff got=fffff99c for instruction=41b75233
-#    Time: 875 ns  Scope: cpu_test_pkg.scoreboard.run_phase File: scoreboard.sv Line: 24
-# ADD x31, x16, x 3
-# XOR x14, x 2, x17
-# MULHU x 5, x 7, x 6
-# SUB x23, x18, x20
-# OR x25, x 2, x 1
-# ADDI x 0, x 0,    0
-# SRLI x 4, x 0,   31
-# MULHU x16, x 6, x30
-# MULHU x 5, x26, x 8
-# ANDI x29, x13, 2654
-# AND x25, x14, x14
-# SRAI x 5, x 7, 1032
-# MULHU x 1, x 5, x19
-# AND x17, x26, x27
+# SLTU x 1, x 8, x18
+# SLTU x 7, x 6, x 6
+# ORI x28, x 1, 1284
 # instruction not supported for display right now
-# ADDI x31, x26, 1755
-# SUB x 2, x 6, x14
-# ADD x 5, x24, x30
-# MULHU x 4, x 5, x 9
+# SRLI x 6, x30,    7
+# MULH x16, x10, x11
+# SUB x30, x23, x 0
+# MULHU x15, x 3, x29
+# AND x29, x10, x 2
+# SLTU x 8, x21, x 5
+# SRLI x28, x 7,    3
+# MULHU x25, x 9, x27
 # ADDI x 0, x 0,    0
-# SRL x11, x15, x26
-# OR x 9, x 0, x 4
-# ADD x20, x30, x 2
-# ADDI x23, x18, 1955
-# SLLI x 2, x16,   26
-# SRL x 1, x 0, x12
-# ADDI x21, x 0, 3380
-# ORI x28, x20, 2326
-# MULHU x16, x26, x14
-# SRA x25, x 8, x12
-# SLTU x15, x20, x 9
-# MUL x 6, x 3, x22
-# SLL x29, x17, x 2
-# ADDI x 0, x 0,    0
-# AND x 9, x12, x19
-# ADDI x19, x13, 1283
-# XORI x 4, x21, 1973
-# SLL x16, x 1, x14
-# OR x 7, x20, x12
-# SLL x29, x28, x30
-# OR x29, x20, x 2
-# XOR x12, x12, x 2
-# SLL x31, x21, x21
-# SLLI x 4, x23,   16
-# instruction not supported for display right now
-# XORI x10, x30, 2605
-# Coverage = 100.00 %
-# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 3930: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# SRAI x20, x23, 1047
+# XOR x23, x 6, x21
+# MULHU x13, x 9, x 1
+# ORI x14, x29, 1453
+# JAL x23, 67c00
+# SRAI x 2, x 7, 1029
+# Coverage = 95.65 %
+# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 15930: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
 # 
 # --- UVM Report Summary ---
 # 
@@ -197,6 +156,6 @@
 # [RNTST]     1
 # [TEST_DONE]     1
 # ** Note: $finish    : /usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
-#    Time: 3930 ns  Iteration: 57  Instance: /simtop
-# End time: 09:14:05 on Nov 11,2026, Elapsed time: 0:00:01
-# Errors: 1, Warnings: 0
+#    Time: 15930 ns  Iteration: 57  Instance: /simtop
+# End time: 13:31:08 on Nov 17,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
