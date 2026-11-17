@@ -30,6 +30,7 @@ class random_tester extends uvm_component;
       else begin
         bfm.valid_WB <= 1'b1;
         bfm.instruction_WB <= bfm.instruction_EX;
+        bfm.PC_WB <= bfm.PC_EX;
       end
      end
 

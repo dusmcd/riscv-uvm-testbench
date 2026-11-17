@@ -1,9 +1,9 @@
-module cpu #(parameter bit read_instructions = 1'b1) (input logic clk, input logic rst, input logic[17:0] io_in, output logic [31:0] io_out);
+module cpu(input logic clk, input logic rst, input logic[17:0] io_in, output logic [31:0] io_out);
   logic[31:0] instruction_mem [4095:0];
   logic[31:0] instruction_EX;
-  initial if (read_instructions) $readmemh("hexcode.txt", instruction_mem);
 
   logic[11:0] PC_FETCH;
+  logic[11:0] PC_EX;
   logic [31:0] io_WB;
   logic [4:0] regdest_WB;
   logic [6:0] opcode;
@@ -29,6 +29,12 @@ module cpu #(parameter bit read_instructions = 1'b1) (input logic clk, input log
   logic [31:0] upper_imm_EX;
   logic [31:0] upper_imm_WB;
   logic [31:0] alu_srcdata_EX;
+  logic [31:0] jal_addr_EX;
+  logic [31:0] branch_addr_EX;
+  logic [31:0] jalr_addr_EX;
+  logic [1:0] pcsrc_EX;
+  logic stall_FETCH;
+  logic stall_EX;
 
   always_ff @(posedge clk) begin
     if(~rst) begin
@@ -38,7 +44,16 @@ module cpu #(parameter bit read_instructions = 1'b1) (input logic clk, input log
 
     else begin
       instruction_EX <= instruction_mem[PC_FETCH];
-      PC_FETCH <= PC_FETCH + 12'b1;
+
+      // need to add logic to handle branch instructions
+      case(pcsrc_EX)
+        2'd0: PC_FETCH <= PC_FETCH + 12'b1;
+        2'd1: PC_FETCH <= jal_addr_EX;
+        2'd2: PC_FETCH <= branch_addr_EX;
+        2'd3: PC_FETCH <= jalr_addr_EX;
+      endcase
+
+      PC_EX <= PC_FETCH;
     end
   end
   
@@ -61,15 +76,25 @@ module cpu #(parameter bit read_instructions = 1'b1) (input logic clk, input log
   assign upper_imm_EX = {imm_u, 12'b0};
 
   control_unit control_unit(
+    .instruction_EX(instruction_EX),
     .opcode(opcode),
     .funct3(funct3),
     .funct7(funct7),
     .csr(csr),
+    .PC_EX(PC_EX),
+    .R_EX(alu_output_EX),
+    .rs1_data(rs1_data),
     .alusrc(alusrc_EX),
+    .stall_EX(stall_EX),
     .regwrite(regwrite_EX),
     .regsel(regsel_EX),
     .aluop(aluop_EX),
-    .gpio_we(gpio_we)
+    .gpio_we(gpio_we),
+    .stall_FETCH(stall_FETCH),
+    .pcsrc_EX(pcsrc_EX),
+    .jal_addr_EX(jal_addr_EX),
+    .branch_addr_EX(branch_addr_EX),
+    .jalr_addr_EX(jalr_addr_EX)
   );
 
 
@@ -98,6 +123,7 @@ module cpu #(parameter bit read_instructions = 1'b1) (input logic clk, input log
     if (regsel_WB == 2'b0) writedata_WB = io_WB;
     else if (regsel_WB == 2'b01) writedata_WB = upper_imm_WB;
     else if (regsel_WB == 2'b10) writedata_WB = alu_output_WB;
+    else if (regsel_WB == 2'd3) writedata_WB = {20'b0, PC_EX};
     else writedata_WB = 32'b0;
   end
 
@@ -118,6 +144,9 @@ module cpu #(parameter bit read_instructions = 1'b1) (input logic clk, input log
 
     // for writing switches to register
     io_WB <= {14'b0, io_in};
+
+    // delay the stall signal so that the next instruction will be a no op
+    stall_EX <= stall_FETCH;
 
     if (gpio_we) io_out <= rs1_data;
   end
