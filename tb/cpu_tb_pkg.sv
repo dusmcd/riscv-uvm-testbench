@@ -23,6 +23,7 @@ package cpu_tb_pkg;
     SRAI,
     SRLI,
     LUI,
+    JAL,
     NOOP
   } instr_t;
 

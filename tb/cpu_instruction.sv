@@ -5,9 +5,16 @@ class CPUInstruction;
   rand bit [4:0] rd;
   rand bit [11:0] imm;
   rand bit [19:0] imm_u;
+  rand bit [20:0] imm_joffset;
 
   constraint valid_registers {
     rd != 5'b0;
+  }
+
+  // offsets must be word aligned and cannot exceed the memory range (12 bits)
+  constraint valid_joffset {
+    imm_joffset % 4 == 0;
+    imm_joffset inside {[12'h0 : 12'hFFF]};
   }
 
   function automatic void create_instr_file(input int num);
@@ -67,7 +74,7 @@ class CPUInstruction;
 
   local function automatic bit [31:0] encode_instr();
     bit [31:0] instruction;
-    typedef enum bit [1:0] {RTYPE, ITYPE, UTYPE, NO_OPERANDS} instr_type;
+    typedef enum int {RTYPE, ITYPE, UTYPE, JTYPE, NO_OPERANDS} instr_type;
     instr_type instr_type_inst;
 
     instruction = 32'b0;
@@ -199,6 +206,10 @@ class CPUInstruction;
         instruction[6:0] = 7'b0110111;
         instr_type_inst = UTYPE;
       end
+      JAL: begin
+        instruction[6:0] = 7'b1101111;
+        instr_type_inst = JTYPE;
+      end
       NOOP: begin
         instruction = 32'h00000013;
         instr_type_inst = NO_OPERANDS;
@@ -226,6 +237,10 @@ class CPUInstruction;
       UTYPE: begin
         instruction[11:7] = rd;
         instruction[31:12] = imm_u;
+      end
+      JTYPE: begin
+        instruction[11:7] = rd;
+        instruction[31:12] = {imm_joffset[20], imm_joffset[10:1], imm_joffset[11], imm_joffset[19:12]};
       end
     endcase
 
