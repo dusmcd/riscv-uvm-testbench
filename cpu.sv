@@ -33,6 +33,7 @@ module cpu(input logic clk, input logic rst, input logic[17:0] io_in, output log
   logic [31:0] branch_addr_EX;
   logic [31:0] jalr_addr_EX;
   logic [1:0] pcsrc_EX;
+  logic [1:0] pcsrc_WB;
   logic stall_FETCH;
   logic stall_EX;
 
@@ -46,7 +47,7 @@ module cpu(input logic clk, input logic rst, input logic[17:0] io_in, output log
       instruction_EX <= instruction_mem[PC_FETCH];
 
       // need to add logic to handle branch instructions
-      case(pcsrc_EX)
+      case(pcsrc_WB)
         2'd0: PC_FETCH <= PC_FETCH + 12'b1;
         2'd1: PC_FETCH <= jal_addr_EX;
         2'd2: PC_FETCH <= branch_addr_EX;
@@ -147,6 +148,8 @@ module cpu(input logic clk, input logic rst, input logic[17:0] io_in, output log
 
     // delay the stall signal so that the next instruction will be a no op
     stall_EX <= stall_FETCH;
+
+    pcsrc_WB <= pcsrc_EX;
 
     if (gpio_we) io_out <= rs1_data;
   end

@@ -6,7 +6,7 @@ interface cpu_bfm(
   input logic [11:0] dut_PC_EX,
   input logic [31:0] dut_jal_addr_EX,
   input logic [31:0] dut_branch_addr_EX,
-  input logic [1:0] dut_pcsrc_EX,
+  input logic [1:0] dut_pcsrc_WB,
   input logic dut_regwrite_EX,
   input logic dut_stall_EX
 );
@@ -24,7 +24,6 @@ interface cpu_bfm(
   logic [31:0] jal_addr_WB;
   logic [31:0] branch_addr_EX;
   logic [31:0] branch_addr_WB;
-  logic [1:0] pcsrc_EX;
   logic [1:0] pcsrc_WB;
   logic regwrite_EX;
   logic stall_EX;
@@ -35,6 +34,7 @@ interface cpu_bfm(
   bit load_instr_request = 0;
   bit load_instr_done = 0;
   int num_instructions;
+  int instructions_checked = 0;
 
   // drive clock
   initial begin
@@ -49,7 +49,7 @@ interface cpu_bfm(
   assign PC_EX = dut_PC_EX;
   assign jal_addr_EX = dut_jal_addr_EX;
   assign branch_addr_EX = dut_branch_addr_EX;
-  assign pcsrc_EX = dut_pcsrc_EX;
+  assign pcsrc_WB = dut_pcsrc_WB;
   assign stall_EX = dut_stall_EX;
   assign regwrite_EX = dut_regwrite_EX;
 

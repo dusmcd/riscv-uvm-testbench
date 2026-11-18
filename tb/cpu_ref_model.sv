@@ -5,6 +5,7 @@ class CPUReferenceModel;
   logic [11:0] pc;
   logic [4:0] rs1, rs2, rd;
   logic stall_EX;
+  logic [1:0] pcsrc;
 
   function new();
     foreach (registers[i])
@@ -14,6 +15,7 @@ class CPUReferenceModel;
     rs1 = 5'b0;
     rs2 = 5'b0;
     rd = 5'b0;
+    pcsrc = 2'b0;
   endfunction
 
   function automatic void decode_and_execute(
@@ -35,6 +37,7 @@ class CPUReferenceModel;
     instr = NOOP;
     pc = PC_WB + 12'b1; // default value if no branch taken or no jump instruction
     stall_EX = 1'b0;
+    pcsrc = 2'b0;
 
     case (instruction[6:0])
       7'b0110011: begin
@@ -262,6 +265,7 @@ class CPUReferenceModel;
     if (registers[rs1] < registers[rs2]) begin
       stall_EX = 1'b1; // the instruction currently in execution stage should be stalled if branch is taken
       pc = PC_WB + {boffset[12], boffset[12:2]};
+      pcsrc = 2'd2;
     end
   endfunction
 
@@ -270,6 +274,7 @@ class CPUReferenceModel;
     if (registers[rs1] >= registers[rs2]) begin
       stall_EX = 1'b1; // the instruction currently in execution stage should be stalled if branch is taken
       pc = PC_WB + {boffset[12], boffset[12:2]};
+      pcsrc = 2'd2;
     end
   endfunction
 
@@ -277,6 +282,7 @@ class CPUReferenceModel;
     if ($signed(registers[rs1]) < $signed(registers[rs2])) begin
       stall_EX = 1'b1; // the instruction currently in execution stage should be stalled if branch is taken
       pc = PC_WB + {boffset[12], boffset[12:2]};
+      pcsrc = 2'd2;
     end
   endfunction
 
@@ -284,6 +290,7 @@ class CPUReferenceModel;
     if ($signed(registers[rs1]) >= $signed(registers[rs2])) begin
       stall_EX = 1'b1; // the instruction currently in execution stage should be stalled if branch is taken
       pc = PC_WB + {boffset[12], boffset[12:2]};
+      pcsrc = 2'd2;
     end
   endfunction
 
@@ -291,6 +298,7 @@ class CPUReferenceModel;
     if (registers[rs1] == registers[rs2]) begin
       stall_EX = 1'b1; // the instruction currently in execution stage should be stalled if branch is taken
       pc = PC_WB + {boffset[12], boffset[12:2]};
+      pcsrc = 2'd2;
     end
   endfunction
 
@@ -299,6 +307,7 @@ class CPUReferenceModel;
     pc = PC_WB + jal_offset[13:2];
     registers[rd] = {20'b0, PC_WB + 12'b1};
     stall_EX = 1'b1;
+    pcsrc = 2'd1;
   endfunction
 
   function automatic void add();

@@ -10,7 +10,7 @@ module simtop;
     .dut_PC_EX(dut.cpu.PC_EX),
     .dut_jal_addr_EX(dut.cpu.jal_addr_EX),
     .dut_branch_addr_EX(dut.cpu.branch_addr_EX),
-    .dut_pcsrc_EX(dut.cpu.pcsrc_EX),
+    .dut_pcsrc_WB(dut.cpu.pcsrc_WB),
     .dut_stall_EX(dut.cpu.stall_EX),
     .dut_regwrite_EX(dut.cpu.regwrite_EX)
 	);
