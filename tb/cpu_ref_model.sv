@@ -19,12 +19,12 @@ class CPUReferenceModel;
   function automatic void decode_and_execute(
     input logic [31:0] instruction,
     input logic [11:0] PC_WB,
-    output instr_t instr_out,
+    output instr_t instr_out
   );
     logic [11:0] imm;
     logic [19:0] imm_u;
 
-    logic [12:0] boffset = {instruction[31], instruction[7], instruction[30:25], instruction[11:6], 1'b0};
+    logic [12:0] boffset = {instruction[31], instruction[7], instruction[30:25], instruction[11:8], 1'b0};
     instr_t instr;
 
     rs1 = instruction[19:15];
@@ -249,6 +249,7 @@ class CPUReferenceModel;
     logic [20:0] jal_offset = {imm_u[19], imm_u[7:0], imm_u[8], imm_u[18:9], 1'b0};
     pc = PC_WB + jal_offset[13:2];
     registers[rd] = {20'b0, PC_WB + 12'b1};
+    stall_EX = 1'b1;
   endfunction
 
   function automatic void add();

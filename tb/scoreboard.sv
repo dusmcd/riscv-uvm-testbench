@@ -15,6 +15,7 @@ class scoreboard extends uvm_component;
 
   function void print_registers();
     $display("instruction: %s", bfm.instr.name());
+    $display("rd: x%d, rs1: x%d, rs2: x%d", ref_model.rd, ref_model.rs1, ref_model.rs2);
     $display("REGISTERS");
     $display("======================");
     for (int i = 0; i < 32; i++)
@@ -35,6 +36,11 @@ class scoreboard extends uvm_component;
             $error("destination register incorrect. expected=%h got=%h for instruction=%h", expected, bfm.writedata_WB, bfm.instruction_WB);
             print_registers();
           end
+        end
+
+        if (bfm.stall_EX != ref_model.stall_EX) begin
+          $error("branch was incorrectly taken or not taken. expected stall=%d, got=%d", ref_model.stall_EX, bfm.stall_EX);
+          print_registers();
         end
 
         case (bfm.pcsrc_WB)
