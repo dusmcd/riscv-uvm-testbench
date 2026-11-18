@@ -1,8 +1,9 @@
-typedef enum int {RTYPE, ITYPE, UTYPE, JTYPE, NA} instr_types;
+typedef enum int {RTYPE, ITYPE, UTYPE, JTYPE, BTYPE, NA} instr_types;
 
 class CPUReferenceModel;
   logic [31:0] registers[32];
   logic [11:0] pc;
+  logic stall_EX;
 
   function new();
     foreach (registers[i])
@@ -22,6 +23,8 @@ class CPUReferenceModel;
     logic [4:0] rd;
     logic [11:0] imm;
     logic [19:0] imm_u;
+
+    logic [12:0] boffset = {instruction[31], instruction[7], instruction[30:25], instruction[11:6], 1'b0};
     instr_t instr;
 
     rs1 = instruction[19:15];
@@ -31,6 +34,7 @@ class CPUReferenceModel;
     imm_u = instruction[31:12];
     instr = NOOP;
     pc = PC_WB + 12'b1; // default value if no branch taken or no jump instruction
+    stall_EX = 1'b0;
 
     case (instruction[6:0])
       7'b0110011: begin
@@ -84,10 +88,16 @@ class CPUReferenceModel;
       7'b1101111: begin
         instr = JAL;
       end
+      7'b1100011: begin
+        // B-type instructions
+        case (instruction[14:12])
+          3'b000: instr = BEQ;
+        endcase
+      end
       default: instr = NOOP;
     endcase
 
-    execute_instruction(instr, rs1, rs2, rd, imm, imm_u, PC_WB, instr_out, write_data);
+    execute_instruction(instr, rs1, rs2, rd, imm, imm_u, PC_WB, boffset, instr_out, write_data);
   endfunction
 
 
@@ -110,6 +120,9 @@ class CPUReferenceModel;
       JTYPE: begin
         $display("%s x%d, %h", instr.name(), rd, imm_u);
       end
+      BTYPE: begin
+        $display("%s x%d, x%d", instr.name(), rs1, rs2);
+      end
       default: $display("instruction not supported for display right now");
     endcase
 
@@ -123,6 +136,7 @@ class CPUReferenceModel;
     input logic [11:0] imm,
     input logic [19:0] imm_u,
     input logic [11:0] PC_WB,
+    input logic [12:0] boffset,
     output instr_t instr_out,
     output logic [31:0] write_data
     );
@@ -216,6 +230,10 @@ class CPUReferenceModel;
         jal(imm_u, rd, PC_WB);
         instr_type = JTYPE;
       end
+      BEQ: begin
+        beq(rs1, rs2, boffset, PC_WB);
+        instr_type = BTYPE;
+      end
       NOOP: ;
     endcase
 
@@ -223,6 +241,13 @@ class CPUReferenceModel;
     instr_out = instr;
     write_data = registers[rd];
     print_instr(instr, instr_type, rs1, rs2, rd, imm, imm_u);
+  endfunction
+
+  function automatic void beq(input logic [4:0] rs1, rs2, input logic [12:0] boffset, input logic [11:0] PC_WB);
+    if (registers[rs1] == registers[rs2]) begin
+      stall_EX = 1'b1; // the instruction currently in execution stage should be stalled if branch is taken
+      pc = PC_WB + {boffset[12], boffset[12:2]};
+    end
   endfunction
 
   function automatic void jal(input logic [19:0] imm_u, input logic [4:0] rd, input logic [11:0] PC_WB);

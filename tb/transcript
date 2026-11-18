@@ -1,6 +1,6 @@
-# vsim -c work.simtop "+UVM_TESTNAME=random_test" -do "run -all; coverage report -cvg -details -zeros -output uncovered.txt" 
-# Start time: 08:40:40 on Nov 18,2026
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# vsim -c work.simtop "+UVM_TESTNAME=raw_test" -do "run -all" 
+# Start time: 11:17:01 on Nov 18,2026
+# ** Note: (vsim-8009) Loading existing optimized design _opt
 # //  Questa Sim-64
 # //  Version 2020.1 linux_x86_64 Jan 28 2020
 # //
@@ -47,7 +47,7 @@
 # 
 # UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
 # UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
-# UVM_INFO @ 0: reporter [RNTST] Running test random_test...
+# UVM_INFO @ 0: reporter [RNTST] Running test raw_test...
 # instruction not supported for display right now
 # ADDI x 1, x 0, 3041
 # ADDI x 2, x 0,  744
@@ -83,62 +83,61 @@
 # XOR x 2, x 6, x 3
 # MULH x 3, x 2, x 9
 # instruction not supported for display right now
-# ADD x 2, x 9, x15
-# SRL x 9, x 4, x15
-# SRAI x 1, x17, 1033
-# SLT x18, x15, x21
-# XORI x31, x 2, 3249
-# SLT x11, x14, x14
-# AND x 1, x 7, x 1
-# MULH x11, x12, x10
-# OR x 7, x20, x30
-# SLT x19, x19, x12
-# SRAI x26, x10, 1032
-# SLL x 1, x11, x 1
-# MULH x 2, x15, x16
-# SLTU x 4, x21, x15
-# SLTU x17, x28, x28
-# SRLI x 8, x18,   10
+# ADD x 2, x12, x15
+# SRL x 9, x 2, x15
+# SRAI x 1, x 9, 1033
+# SLT x18, x 1, x21
+# XORI x31, x18, 3249
+# SLT x11, x31, x14
+# AND x 1, x11, x 1
+# MULH x11, x 1, x10
+# OR x 7, x11, x30
+# SLT x19, x 7, x12
+# SRAI x26, x19, 1032
+# SLL x 1, x26, x 1
+# MULH x 2, x 1, x16
+# SLTU x 4, x 2, x15
+# SLTU x17, x 4, x28
+# SRLI x 8, x17,   10
+# BEQ x 8, x 7
+# XORI x16, x18, 2804
+# instruction not supported for display right now
+# SLTU x23, x 4, x19
+# MULHU x18, x23, x 5
+# ORI x 7, x18, 2537
+# AND x31, x 7, x11
+# XOR x21, x31, x15
+# instruction not supported for display right now
+# instruction not supported for display right now
+# ADD x26, x16, x 0
+# ADDI x12, x26,  295
 # ADDI x 0, x 0,    0
-# XORI x16, x15, 2804
-# instruction not supported for display right now
-# SLTU x23, x20, x19
-# MULHU x18, x 4, x 5
-# ORI x 7, x21, 2537
-# AND x31, x20, x11
-# XOR x21, x 8, x15
-# instruction not supported for display right now
-# instruction not supported for display right now
-# ADD x26, x27, x 0
-# ADDI x12, x 7,  295
-# XOR x 8, x24, x15
-# SLLI x12, x 3,   14
-# XOR x20, x16, x13
-# SLL x 7, x 3, x 8
-# ANDI x 8, x28, 3922
-# XORI x 5, x 6, 1901
-# ADDI x10, x 4, 3562
+# SLLI x12, x 8,   14
+# XOR x20, x12, x13
+# SLL x 7, x20, x 8
+# ANDI x 8, x 7, 3922
+# XORI x 5, x 8, 1901
+# ADDI x10, x 5, 3562
 # JAL x15, 22000
-# SRA x 1, x 4, x21
+# AND x 4, x15, x 2
+# SRA x 1, x 8, x21
 # instruction not supported for display right now
-# SLTU x 1, x 8, x18
-# SLTU x 7, x 6, x 6
-# ORI x28, x 1, 1284
+# SLTU x 1, x29, x18
+# SLTU x 7, x 1, x 6
+# ORI x28, x 7, 1284
 # instruction not supported for display right now
-# SRLI x 6, x30,    7
-# MULH x16, x10, x11
-# SUB x30, x23, x 0
-# MULHU x15, x 3, x29
-# AND x29, x10, x 2
-# SLTU x 8, x21, x 5
-# SRLI x28, x 7,    3
-# MULHU x25, x 9, x27
+# SRLI x 6, x17,    7
+# MULH x16, x 6, x11
+# SUB x30, x16, x 0
+# MULHU x15, x30, x29
+# AND x29, x15, x 2
 # ADDI x 0, x 0,    0
-# SRAI x20, x23, 1047
-# XOR x23, x 6, x21
-# MULHU x13, x 9, x 1
-# ORI x14, x29, 1453
-# JAL x23, 67c00
+# SRLI x28, x 8,    3
+# MULHU x25, x28, x27
+# BEQ x25, x31
+# ** Error: PC incorrect. expected=d74, got=00000401 for instruction=49fc8ce3
+#    Time: 885 ns  Scope: cpu_test_pkg.scoreboard.run_phase File: scoreboard.sv Line: 39
+# SRAI x20, x28, 1047
 # Coverage = 95.65 %
 # UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 15930: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
 # 
@@ -155,5 +154,5 @@
 # [TEST_DONE]     1
 # ** Note: $finish    : /usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
 #    Time: 15930 ns  Iteration: 57  Instance: /simtop
-# End time: 08:40:42 on Nov 18,2026, Elapsed time: 0:00:02
-# Errors: 0, Warnings: 0
+# End time: 11:17:02 on Nov 18,2026, Elapsed time: 0:00:01
+# Errors: 1, Warnings: 0

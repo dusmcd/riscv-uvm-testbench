@@ -28,10 +28,11 @@ class random_tester extends uvm_component;
       if (~bfm.KEY[0])
         bfm.valid_WB <= 1'b0;
       else begin
-        bfm.valid_WB <= ~bfm.stall_EX;
+        bfm.valid_WB <= ~bfm.stall_EX && bfm.regwrite_EX;
         bfm.instruction_WB <= bfm.instruction_EX;
         bfm.PC_WB <= bfm.PC_EX;
         bfm.jal_addr_WB <= bfm.jal_addr_EX;
+        bfm.branch_addr_WB <= bfm.branch_addr_EX;
         bfm.pcsrc_WB <= bfm.pcsrc_EX;
       end
      end
