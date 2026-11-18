@@ -6,9 +6,15 @@ module simtop;
   import cpu_test_pkg::*;
   cpu_bfm bfm(
 		.dut_instruction_EX(dut.cpu.instruction_EX),
-    .dut_writedata_WB(dut.cpu.writedata_WB)
+    .dut_writedata_WB(dut.cpu.writedata_WB),
+    .dut_PC_EX(dut.cpu.PC_EX),
+    .dut_jal_addr_EX(dut.cpu.jal_addr_EX),
+    .dut_branch_addr_EX(dut.cpu.branch_addr_EX),
+    .dut_pcsrc_EX(dut.cpu.pcsrc_EX),
+    .dut_stall_EX(dut.cpu.stall_EX),
+    .dut_regwrite_EX(dut.cpu.regwrite_EX)
 	);
-	top #(.read_instructions(1'b0)) dut
+	top dut
 	(
 		//////////// CLOCK //////////
 		.CLOCK_50(bfm.clk),

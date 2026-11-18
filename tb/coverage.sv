@@ -27,6 +27,7 @@ class coverage extends uvm_component;
       bins srai = {SRAI};
       bins srli = {SRLI};
       bins lui = {LUI};
+      bins jal = {JAL};
     }
   endgroup
 
