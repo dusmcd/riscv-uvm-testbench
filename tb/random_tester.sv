@@ -49,6 +49,7 @@ class random_tester extends uvm_component;
     pipeline();
     bfm.reset_cpu();
     repeat((31 + bfm.num_instructions) * 3) @(negedge bfm.clk);
+    $display("instructions executed: %d", bfm.num_instructions);
     bfm.done = 1'b1;
   endtask
 
