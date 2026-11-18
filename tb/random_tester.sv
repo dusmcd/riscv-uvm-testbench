@@ -12,7 +12,7 @@ class random_tester extends uvm_component;
     if (!uvm_config_db #(virtual cpu_bfm)::get(null, "*", "bfm", bfm))
       $fatal("Failed to get BFM");
     
-    bfm.num_instructions = 500;
+    bfm.num_instructions = 1000;
   endfunction
 
   protected virtual task generate_instructions(int num_instructions);
@@ -25,10 +25,13 @@ class random_tester extends uvm_component;
         
      forever begin
       @(posedge bfm.clk)
-      if (~bfm.KEY[0])
+      if (~bfm.KEY[0]) begin
         bfm.valid_WB <= 1'b0;
+        bfm.not_stalled <= 1'b0;
+      end
       else begin
-        bfm.valid_WB <= ~bfm.stall_EX && bfm.regwrite_EX;
+        bfm.valid_WB <= bfm.regwrite_EX;
+        bfm.not_stalled <= ~bfm.stall_EX;
         bfm.instruction_WB <= bfm.instruction_EX;
         bfm.PC_WB <= bfm.PC_EX;
         bfm.jal_addr_WB <= bfm.jal_addr_EX;

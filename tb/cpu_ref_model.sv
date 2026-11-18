@@ -92,6 +92,10 @@ class CPUReferenceModel;
         // B-type instructions
         case (instruction[14:12])
           3'b000: instr = BEQ;
+          3'b101: instr = BGE;
+          3'b111: instr = BGEU;
+          3'b100: instr = BLT;
+          3'b110: instr = BLTU;
         endcase
       end
       default: instr = NOOP;
@@ -230,12 +234,57 @@ class CPUReferenceModel;
         beq(boffset, PC_WB);
         instr_type = BTYPE;
       end
+      BGE: begin
+        bge(boffset, PC_WB);
+        instr_type = BTYPE;
+      end
+      BGEU: begin
+        bgeu(boffset, PC_WB);
+        instr_type = BTYPE;
+      end
+      BLT: begin
+        blt(boffset, PC_WB);
+        instr_type = BTYPE;
+      end
+      BLTU: begin
+        bltu(boffset, PC_WB);
+        instr_type = BTYPE;
+      end
       NOOP: ;
     endcase
 
     registers[0] = 32'b0;
     instr_out = instr;
-    //print_instr(instr, instr_type, rs1, rs2, rd, imm, imm_u);
+    // print_instr(instr, instr_type, rs1, rs2, rd, imm, imm_u);
+  endfunction
+
+  function automatic void bltu(input logic [12:0] boffset, input logic [11:0] PC_WB);
+    if (registers[rs1] < registers[rs2]) begin
+      stall_EX = 1'b1; // the instruction currently in execution stage should be stalled if branch is taken
+      pc = PC_WB + {boffset[12], boffset[12:2]};
+    end
+  endfunction
+
+
+  function automatic void bgeu(input logic [12:0] boffset, input logic [11:0] PC_WB);
+    if (registers[rs1] >= registers[rs2]) begin
+      stall_EX = 1'b1; // the instruction currently in execution stage should be stalled if branch is taken
+      pc = PC_WB + {boffset[12], boffset[12:2]};
+    end
+  endfunction
+
+  function automatic void blt(input logic [12:0] boffset, input logic [11:0] PC_WB);
+    if ($signed(registers[rs1]) < $signed(registers[rs2])) begin
+      stall_EX = 1'b1; // the instruction currently in execution stage should be stalled if branch is taken
+      pc = PC_WB + {boffset[12], boffset[12:2]};
+    end
+  endfunction
+
+  function automatic void bge(input logic [12:0] boffset, input logic [11:0] PC_WB);
+    if ($signed(registers[rs1]) >= $signed(registers[rs2])) begin
+      stall_EX = 1'b1; // the instruction currently in execution stage should be stalled if branch is taken
+      pc = PC_WB + {boffset[12], boffset[12:2]};
+    end
   endfunction
 
   function automatic void beq(input logic [12:0] boffset, input logic [11:0] PC_WB);

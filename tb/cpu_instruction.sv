@@ -218,6 +218,26 @@ class CPUInstruction;
         instr_type_inst = BTYPE;
         instruction[14:12] = 3'b000;
       end
+      BGE: begin
+        instruction[6:0] = 7'b1100011;
+        instr_type_inst = BTYPE;
+        instruction[14:12] = 3'b101;
+      end
+      BGEU: begin
+        instruction[6:0] = 7'b1100011;
+        instr_type_inst = BTYPE;
+        instruction[14:12] = 3'b111;
+      end
+      BLT: begin
+        instruction[6:0] = 7'b1100011;
+        instr_type_inst = BTYPE;
+        instruction[14:12] = 3'b100;
+      end
+      BLTU: begin
+        instruction[6:0] = 7'b1100011;
+        instr_type_inst = BTYPE;
+        instruction[14:12] = 3'b110;
+      end
       NOOP: begin
         instruction = 32'h00000013;
         instr_type_inst = NO_OPERANDS;

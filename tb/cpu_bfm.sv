@@ -28,6 +28,7 @@ interface cpu_bfm(
   logic [1:0] pcsrc_WB;
   logic regwrite_EX;
   logic stall_EX;
+  logic not_stalled;
   bit valid_WB;
   instr_t instr;
   bit done;

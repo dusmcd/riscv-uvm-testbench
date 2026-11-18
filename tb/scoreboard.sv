@@ -26,7 +26,7 @@ class scoreboard extends uvm_component;
     forever begin 
       @(posedge bfm.clk)
 
-      if (!$isunknown(bfm.instruction_WB)) begin
+      if (bfm.not_stalled && !$isunknown(bfm.instruction_WB)) begin
         // check reference model against DUT 
         logic [31:0] expected;
         ref_model.decode_and_execute(bfm.instruction_WB, bfm.PC_WB, bfm.instr);
@@ -40,6 +40,7 @@ class scoreboard extends uvm_component;
 
         if (bfm.stall_EX != ref_model.stall_EX) begin
           $error("branch was incorrectly taken or not taken. expected stall=%d, got=%d", ref_model.stall_EX, bfm.stall_EX);
+          $display("PC Source: %d", bfm.pcsrc_WB);
           print_registers();
         end
 

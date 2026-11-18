@@ -25,6 +25,10 @@ package cpu_tb_pkg;
     LUI,
     JAL,
     BEQ,
+    BGE,
+    BGEU,
+    BLT,
+    BLTU,
     NOOP
   } instr_t;
 

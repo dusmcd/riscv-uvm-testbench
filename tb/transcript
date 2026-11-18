@@ -1,5 +1,5 @@
 # vsim -c work.simtop "+UVM_TESTNAME=random_test" -do "run -all" 
-# Start time: 12:54:15 on Nov 18,2026
+# Start time: 13:48:04 on Nov 18,2026
 # ** Note: (vsim-8009) Loading existing optimized design _opt
 # //  Questa Sim-64
 # //  Version 2020.1 linux_x86_64 Jan 28 2020
@@ -48,8 +48,8 @@
 # UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
 # UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
 # UVM_INFO @ 0: reporter [RNTST] Running test random_test...
-# Coverage = 95.65 %
-# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 15930: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# Coverage = 75.00 %
+# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 30930: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
 # 
 # --- UVM Report Summary ---
 # 
@@ -63,6 +63,6 @@
 # [RNTST]     1
 # [TEST_DONE]     1
 # ** Note: $finish    : /usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
-#    Time: 15930 ns  Iteration: 57  Instance: /simtop
-# End time: 12:54:15 on Nov 18,2026, Elapsed time: 0:00:00
+#    Time: 30930 ns  Iteration: 57  Instance: /simtop
+# End time: 13:48:05 on Nov 18,2026, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
