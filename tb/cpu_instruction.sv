@@ -7,6 +7,7 @@ class CPUInstruction;
   rand bit [19:0] imm_u;
   rand bit [20:0] imm_joffset;
   rand bit [12:0] imm_boffset;
+  bit branch;
 
   constraint valid_registers {
     rd != 5'b0;
@@ -15,9 +16,14 @@ class CPUInstruction;
   // offsets must be word aligned and cannot exceed the memory range (12 bits)
   constraint valid_offset {
     imm_joffset % 4 == 0;
-    imm_joffset inside {[12'h0 : 12'hFFF]};
+    imm_joffset inside {[12'd1 : 12'd20]};
     imm_boffset % 4 == 0;
-    imm_boffset inside {[12'h0 : 12'hFFF]};
+    imm_boffset inside {[12'd1 : 12'h10]};
+  }
+
+  constraint branch_instructions {
+    if (branch)
+      instr inside {BEQ, BGE, BGEU, BLT, BLTU};
   }
 
   function automatic void create_instr_file(input int num);
@@ -27,38 +33,22 @@ class CPUInstruction;
 
     randomize_regs(file);
     for (int i = 0; i < num; i++) begin
-      bit [31:0] instruction;
+      // every 10 instructions will be a branch instruction
+      if (i % 10 == 0)
+        branch = 1'b1;
+      else begin
+        branch = 1'b0;
+      end
       if (!randomize())
         $fatal("Randomization failed");
 
-      instruction = encode_instr(); 
-      $fdisplay(file, "%h", instruction);
+      $fdisplay(file, "%h", encode_instr());
       
     end
     $fclose(file);
   endfunction
 
-  function automatic void create_branch_instr_file(input int num);
-    int file = $fopen("tb_instructions.txt", "w");
-    if (file == 0)
-      $fatal("Could not create file");
-
-    randomize_regs(file);
-
-    for (int i = 0; i < num; i++) begin
-      if (!randomize())
-        $fatal("Randomization failed");
-      if (i % 4 == 0) begin
-        instr = BEQ;
-        rs1 = 5'b0;
-        rs2 = 5'b0;
-      end
-      $fdisplay(file, "%h", encode_instr());
-
-    end
-    $fclose(file);
-  endfunction
-
+  
   local function automatic void randomize_regs(input int file);
     // generate instructions to fill out regfile with random values
     for (int i = 1; i < 32; i++) begin
