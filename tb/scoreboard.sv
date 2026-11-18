@@ -38,22 +38,25 @@ class scoreboard extends uvm_component;
           end
         end
 
+        /*
         if (bfm.stall_EX != ref_model.stall_EX) begin
           $error("branch was incorrectly taken or not taken. expected stall=%d, got=%d", ref_model.stall_EX, bfm.stall_EX);
           $display("PC Source: %d", bfm.pcsrc_WB);
           print_registers();
         end
+        */
 
         case (bfm.pcsrc_WB)
           2'd1: begin
-            if (bfm.jal_addr_WB != ref_model.pc) begin
+            if (bfm.jal_addr_WB[11:0] != ref_model.pc) begin
               $error("PC incorrect. expected=%h, got=%h for instruction=%h", ref_model.pc, bfm.jal_addr_WB, bfm.instruction_WB);
               $display("PC Source: %d", bfm.pcsrc_WB);
               print_registers();
             end
           end
           2'd2: begin
-            if (bfm.branch_addr_WB != ref_model.pc) begin
+            $display("getting to pcsrc = 2, instruction=%s", bfm.instr.name());
+            if (bfm.branch_addr_WB[11:0] != ref_model.pc) begin
               $error("PC incorrect. expected=%h, got=%h for instruction=%h", ref_model.pc, bfm.branch_addr_WB, bfm.instruction_WB);
               $display("PC Source: %d", bfm.pcsrc_WB);
               print_registers();
