@@ -13,10 +13,12 @@ class scoreboard extends uvm_component;
         $fatal("Failed to get BFM");
   endfunction
 
-  local function automatic void checkDestinationRegister();
-    if (bfm.writedata_WB != bfm.expected) begin
-      $error("destination register incorrect. expected=%h got=%h for instruction=%h", bfm.expected, bfm.writedata_WB, bfm.instruction_WB);
-    end
+  function void print_registers();
+    $display("instruction: %s", bfm.instr.name());
+    $display("REGISTERS");
+    $display("======================");
+    for (int i = 0; i < 32; i++)
+      $display("x%d: %h", i, ref_model.registers[i]);
   endfunction
 
   task run_phase(uvm_phase phase);
@@ -25,18 +27,29 @@ class scoreboard extends uvm_component;
 
       if (!$isunknown(bfm.instruction_WB)) begin
         // check reference model against DUT 
-        ref_model.decode_and_execute(bfm.instruction_WB, bfm.PC_WB, bfm.instr, bfm.expected);
-        if (bfm.valid_WB) checkDestinationRegister();
+        logic [31:0] expected;
+        ref_model.decode_and_execute(bfm.instruction_WB, bfm.PC_WB, bfm.instr);
+        expected = ref_model.registers[ref_model.rd];
+        if (bfm.valid_WB) begin
+          if (bfm.writedata_WB != expected) begin
+            $error("destination register incorrect. expected=%h got=%h for instruction=%h", expected, bfm.writedata_WB, bfm.instruction_WB);
+            print_registers();
+          end
+        end
 
         case (bfm.pcsrc_WB)
           2'd1: begin
             if (bfm.jal_addr_WB != ref_model.pc) begin
               $error("PC incorrect. expected=%h, got=%h for instruction=%h", ref_model.pc, bfm.jal_addr_WB, bfm.instruction_WB);
+              $display("PC Source: %d", bfm.pcsrc_WB);
+              print_registers();
             end
           end
           2'd2: begin
             if (bfm.branch_addr_WB != ref_model.pc) begin
               $error("PC incorrect. expected=%h, got=%h for instruction=%h", ref_model.pc, bfm.branch_addr_WB, bfm.instruction_WB);
+              $display("PC Source: %d", bfm.pcsrc_WB);
+              print_registers();
             end
           end
         endcase

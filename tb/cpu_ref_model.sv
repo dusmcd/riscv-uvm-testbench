@@ -3,6 +3,7 @@ typedef enum int {RTYPE, ITYPE, UTYPE, JTYPE, BTYPE, NA} instr_types;
 class CPUReferenceModel;
   logic [31:0] registers[32];
   logic [11:0] pc;
+  logic [4:0] rs1, rs2, rd;
   logic stall_EX;
 
   function new();
@@ -10,17 +11,16 @@ class CPUReferenceModel;
       registers[i] = 32'b0;
 
     pc = 12'b0;
+    rs1 = 5'b0;
+    rs2 = 5'b0;
+    rd = 5'b0;
   endfunction
 
   function automatic void decode_and_execute(
     input logic [31:0] instruction,
     input logic [11:0] PC_WB,
     output instr_t instr_out,
-    output logic [31:0] write_data
   );
-    logic [4:0] rs1;
-    logic [4:0] rs2;
-    logic [4:0] rd;
     logic [11:0] imm;
     logic [19:0] imm_u;
 
@@ -97,7 +97,7 @@ class CPUReferenceModel;
       default: instr = NOOP;
     endcase
 
-    execute_instruction(instr, rs1, rs2, rd, imm, imm_u, PC_WB, boffset, instr_out, write_data);
+    execute_instruction(instr, imm, imm_u, PC_WB, boffset, instr_out);
   endfunction
 
 
@@ -130,108 +130,104 @@ class CPUReferenceModel;
 
   local function automatic void execute_instruction(
     input instr_t instr,
-    input logic [4:0] rs1,
-    input logic [4:0] rs2,
-    input logic [4:0] rd,
     input logic [11:0] imm,
     input logic [19:0] imm_u,
     input logic [11:0] PC_WB,
     input logic [12:0] boffset,
-    output instr_t instr_out,
-    output logic [31:0] write_data
-    );
+    output instr_t instr_out
+  );
 
     instr_types instr_type;
     instr_type = NA;
     case (instr)
       ADD: begin
-        add(rs1, rs2, rd);
+        add();
         instr_type = RTYPE;
       end
       SUB: begin
-        sub(rs1, rs2, rd);
+        sub();
         instr_type = RTYPE;
       end
       AND: begin
-        and_op(rs1, rs2, rd);
+        and_op();
         instr_type = RTYPE;
       end
       OR: begin
-        or_op(rs1, rs2, rd);
+        or_op();
         instr_type = RTYPE;
       end
       XOR: begin
-        xor_op(rs1, rs2, rd);
+        xor_op();
         instr_type = RTYPE;
       end
       SLL: begin
-        sll(rs1, rs2, rd);
+        sll();
         instr_type = RTYPE;
       end
       SRA: begin
-        sra(rs1, rs2, rd);
+        sra();
         instr_type = RTYPE;
       end
       SRL: begin
-        srl(rs1, rs2, rd);
+        srl();
         instr_type = RTYPE;
       end
       SLT: begin
-        slt(rs1, rs2, rd);
+        slt();
         instr_type = RTYPE;
       end
       SLTU: begin
-        sltu(rs1, rs2, rd);
+        sltu();
         instr_type = RTYPE;
       end
       MUL: begin
-        mul(rs1, rs2, rd);
+        mul();
         instr_type = RTYPE;
       end
       MULH: begin
-        mulh(rs1, rs2, rd);
+        mulh();
         instr_type = RTYPE;
       end
       MULHU: begin
-        mulhu(rs1, rs2, rd);
+        mulhu();
         instr_type = RTYPE;
       end
-      CSRRW: csrrw(rs1, rd, imm);
+      CSRRW: csrrw(imm);
       ADDI: begin
-        addi(rs1, imm, rd);
+        addi(imm);
         instr_type = ITYPE;
       end
       ANDI: begin
-        andi(rs1, imm, rd);
+        andi(imm);
         instr_type = ITYPE;
       end
       ORI: begin
-        ori(rs1, imm, rd);
+        ori(imm);
         instr_type = ITYPE;
       end
       XORI: begin
-        xori(rs1, imm, rd);
+        xori(imm);
         instr_type = ITYPE;
       end
       SLLI: begin
-        slli(rs1, imm, rd);
+        slli(imm);
         instr_type = ITYPE;
       end
       SRAI: begin
-        srai(rs1, imm, rd);
+        srai(imm);
         instr_type = ITYPE;
       end
       SRLI: begin
-        srli(rs1, imm, rd);
+        srli(imm);
         instr_type = ITYPE;
       end
-      LUI: lui(imm_u, rd);
+      LUI: lui(imm_u);
       JAL: begin
-        jal(imm_u, rd, PC_WB);
+        jal(imm_u, PC_WB);
         instr_type = JTYPE;
       end
       BEQ: begin
-        beq(rs1, rs2, boffset, PC_WB);
+        beq(boffset, PC_WB);
         instr_type = BTYPE;
       end
       NOOP: ;
@@ -239,68 +235,67 @@ class CPUReferenceModel;
 
     registers[0] = 32'b0;
     instr_out = instr;
-    write_data = registers[rd];
-    print_instr(instr, instr_type, rs1, rs2, rd, imm, imm_u);
+    //print_instr(instr, instr_type, rs1, rs2, rd, imm, imm_u);
   endfunction
 
-  function automatic void beq(input logic [4:0] rs1, rs2, input logic [12:0] boffset, input logic [11:0] PC_WB);
+  function automatic void beq(input logic [12:0] boffset, input logic [11:0] PC_WB);
     if (registers[rs1] == registers[rs2]) begin
       stall_EX = 1'b1; // the instruction currently in execution stage should be stalled if branch is taken
       pc = PC_WB + {boffset[12], boffset[12:2]};
     end
   endfunction
 
-  function automatic void jal(input logic [19:0] imm_u, input logic [4:0] rd, input logic [11:0] PC_WB);
+  function automatic void jal(input logic [19:0] imm_u, input logic [11:0] PC_WB);
     logic [20:0] jal_offset = {imm_u[19], imm_u[7:0], imm_u[8], imm_u[18:9], 1'b0};
     pc = PC_WB + jal_offset[13:2];
     registers[rd] = {20'b0, PC_WB + 12'b1};
   endfunction
 
-  function automatic void add(input logic[4:0] rs1, rs2, rd);
+  function automatic void add();
     registers[rd] = registers[rs1] + registers[rs2];
   endfunction
 
-  function automatic void sub(input logic[4:0] rs1, rs2, rd);
+  function automatic void sub();
     registers[rd] = registers[rs1] - registers[rs2];
   endfunction
 
-  function automatic void and_op(input logic[4:0] rs1, rs2, rd);
+  function automatic void and_op();
     registers[rd] = registers[rs1] & registers[rs2];
   endfunction
 
-  function automatic void or_op(input logic[4:0] rs1, rs2, rd);
+  function automatic void or_op();
     registers[rd] = registers[rs1] | registers[rs2];
   endfunction
 
-  function automatic void xor_op(input logic[4:0] rs1, rs2, rd);
+  function automatic void xor_op();
     registers[rd] = registers[rs1] ^ registers[rs2];
   endfunction
 
-  function automatic void sll(input logic[4:0] rs1, rs2, rd);
+  function automatic void sll();
     registers[rd] = registers[rs1] << registers[rs2][4:0];
   endfunction
 
-  function automatic void sra(input logic[4:0] rs1, rs2, rd);
+  function automatic void sra();
     registers[rd] = $signed(registers[rs1]) >>> registers[rs2][4:0];
   endfunction
 
-  function automatic void srl(input logic[4:0] rs1, rs2, rd);
+  function automatic void srl();
     registers[rd] = registers[rs1] >> registers[rs2][4:0];
   endfunction
 
-  function automatic void slt(input logic[4:0] rs1, rs2, rd);
+  function automatic void slt();
     registers[rd] = ($signed(registers[rs1]) < $signed(registers[rs2]));
   endfunction
 
-  function automatic void sltu(input logic[4:0] rs1, rs2, rd);
+  function automatic void sltu();
     registers[rd] = (registers[rs1] < registers[rs2]);
   endfunction
 
-  function automatic void mul(input logic[4:0] rs1, rs2, rd);
+  function automatic void mul();
     registers[rd] = registers[rs1] * registers[rs2];
   endfunction
 
-  function automatic void mulh(input logic[4:0] rs1, rs2, rd);
+  function automatic void mulh();
     logic signed [63:0] product;
     logic signed [63:0] lhs;
     logic signed [63:0] rhs;
@@ -310,7 +305,7 @@ class CPUReferenceModel;
     registers[rd] = product[63:32];
   endfunction
 
-  function automatic void mulhu(input logic[4:0] rs1, rs2, rd);
+  function automatic void mulhu();
     logic [63:0] product;
     logic [63:0] lhs;
     logic [63:0] rhs;
@@ -320,41 +315,41 @@ class CPUReferenceModel;
     registers[rd] = product[63:32];
   endfunction
 
-  function automatic void csrrw(input logic[4:0] rs1, rd, input logic[11:0] csr);
+  function automatic void csrrw(input logic[11:0] csr);
     /*
       this will not use CSR state, but will serve as a general purpose I/O
     */
   endfunction
 
-  function automatic void addi(input logic[4:0] rs1, input logic [11:0] imm, input logic [4:0] rd);
+  function automatic void addi(input logic [11:0] imm);
     registers[rd] = registers[rs1] + {{20{imm[11]}}, imm};
   endfunction
 
-  function automatic void andi(input logic[4:0] rs1, input logic [11:0] imm, input logic [4:0] rd);
+  function automatic void andi(input logic [11:0] imm);
     registers[rd] = registers[rs1] & {{20{imm[11]}}, imm};
   endfunction
 
-  function automatic void ori(input logic[4:0] rs1, input logic [11:0] imm, input logic [4:0] rd);
+  function automatic void ori(input logic [11:0] imm);
     registers[rd] = registers[rs1] | {{20{imm[11]}}, imm};
   endfunction
 
-  function automatic void xori(input logic[4:0] rs1, input logic [11:0] imm, input logic [4:0] rd);
+  function automatic void xori(input logic [11:0] imm);
     registers[rd] = registers[rs1] ^ {{20{imm[11]}}, imm};
   endfunction
 
-  function automatic void slli(input logic[4:0] rs1, input logic [11:0] imm, input logic [4:0] rd);
+  function automatic void slli(input logic [11:0] imm);
     registers[rd] = registers[rs1] << imm[4:0];
   endfunction
 
-  function automatic void srai(input logic[4:0] rs1, input logic [11:0] imm, input logic [4:0] rd);
+  function automatic void srai(input logic [11:0] imm);
     registers[rd] = $signed(registers[rs1]) >>> imm[4:0];
   endfunction
 
-  function automatic void srli(input logic[4:0] rs1, input logic [11:0] imm, input logic [4:0] rd);
+  function automatic void srli( input logic [11:0] imm);
     registers[rd] = registers[rs1] >> imm[4:0];
   endfunction
 
-  function automatic void lui(input logic [19:0] imm_u, input logic [4:0] rd);
+  function automatic void lui(input logic [19:0] imm_u);
     registers[rd] = {imm_u, 12'b0};
   endfunction
 
