@@ -5,7 +5,8 @@ interface cpu_bfm(
   input logic [31:0] dut_writedata_WB,
   input logic [11:0] dut_PC_EX,
   input logic [31:0] dut_jal_addr_EX,
-  input logic [1:0] dut_pcsrc_EX
+  input logic [1:0] dut_pcsrc_EX,
+  input logic dut_stall_EX
 );
   bit clk;
 	logic [6:0] HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,HEX6,HEX7;
@@ -21,6 +22,7 @@ interface cpu_bfm(
   logic [31:0] jal_addr_WB;
   logic [1:0] pcsrc_EX;
   logic [1:0] pcsrc_WB;
+  logic stall_EX;
   bit valid_WB;
   instr_t instr;
   bit done;
@@ -41,6 +43,7 @@ interface cpu_bfm(
   assign PC_EX = dut_PC_EX;
   assign jal_addr_EX = dut_jal_addr_EX;
   assign pcsrc_EX = dut_pcsrc_EX;
+  assign stall_EX = dut_stall_EX;
 
 
   task reset_cpu();

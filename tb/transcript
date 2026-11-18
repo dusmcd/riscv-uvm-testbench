@@ -1,6 +1,6 @@
 # vsim -c work.simtop "+UVM_TESTNAME=random_test" -do "run -all; coverage report -cvg -details -zeros -output uncovered.txt" 
-# Start time: 13:31:07 on Nov 17,2026
-# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Start time: 08:40:40 on Nov 18,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
 # //  Questa Sim-64
 # //  Version 2020.1 linux_x86_64 Jan 28 2020
 # //
@@ -119,7 +119,6 @@
 # XORI x 5, x 6, 1901
 # ADDI x10, x 4, 3562
 # JAL x15, 22000
-# AND x 4, x19, x 2
 # SRA x 1, x 4, x21
 # instruction not supported for display right now
 # SLTU x 1, x 8, x18
@@ -140,7 +139,6 @@
 # MULHU x13, x 9, x 1
 # ORI x14, x29, 1453
 # JAL x23, 67c00
-# SRAI x 2, x 7, 1029
 # Coverage = 95.65 %
 # UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 15930: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
 # 
@@ -157,5 +155,5 @@
 # [TEST_DONE]     1
 # ** Note: $finish    : /usr/local/3rdparty/mentor/questasim/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
 #    Time: 15930 ns  Iteration: 57  Instance: /simtop
-# End time: 13:31:08 on Nov 17,2026, Elapsed time: 0:00:01
+# End time: 08:40:42 on Nov 18,2026, Elapsed time: 0:00:02
 # Errors: 0, Warnings: 0

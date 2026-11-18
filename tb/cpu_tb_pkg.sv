@@ -24,6 +24,7 @@ package cpu_tb_pkg;
     SRLI,
     LUI,
     JAL,
+    BEQ,
     NOOP
   } instr_t;
 
