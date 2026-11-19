@@ -22,6 +22,13 @@ class scoreboard extends uvm_component;
       $display("x%d: %h", i, ref_model.registers[i]);
   endfunction
 
+  local function void log_instruction();
+    if (bfm.instruction_counts.exists(bfm.instr.name()))
+      bfm.instruction_counts[bfm.instr.name()]++;
+    else
+      bfm.instruction_counts[bfm.instr.name()] = 1;
+  endfunction
+
   task run_phase(uvm_phase phase);
     forever begin 
       @(posedge bfm.clk)
@@ -30,6 +37,7 @@ class scoreboard extends uvm_component;
         // check reference model against DUT 
         logic [31:0] expected;
         ref_model.decode_and_execute(bfm.instruction_WB, bfm.PC_WB, bfm.instr);
+        log_instruction();
         bfm.instructions_checked++;
         expected = ref_model.registers[ref_model.rd];
         if (bfm.valid_WB) begin

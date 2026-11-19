@@ -35,6 +35,7 @@ interface cpu_bfm(
   bit load_instr_done = 0;
   int num_instructions;
   int instructions_checked = 0;
+  int instruction_counts[string];
 
   // drive clock
   initial begin

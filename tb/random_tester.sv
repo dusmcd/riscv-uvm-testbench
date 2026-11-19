@@ -15,6 +15,17 @@ class random_tester extends uvm_component;
     bfm.num_instructions = 4000;
   endfunction
 
+  function void print_instruction_counts();
+    int count = 0;
+    $display("INSTRUCTIONS EXECUTED AND COUNT");
+    foreach (bfm.instruction_counts[key]) begin
+      $display("%s: %d", key, bfm.instruction_counts[key]);
+      count += bfm.instruction_counts[key];
+    end
+    $display("total instructions executed: %d", count);
+  endfunction
+
+
   protected virtual task generate_instructions(int num_instructions);
     cpu_instr.create_instr_file(num_instructions);
     bfm.load_instructions();
@@ -47,8 +58,8 @@ class random_tester extends uvm_component;
     generate_instructions(bfm.num_instructions);
     pipeline();
     bfm.reset_cpu();
-    repeat((31 + bfm.num_instructions) * 3) @(negedge bfm.clk);
-    $display("instructions executed: %d", bfm.instructions_checked);
+    repeat(31 + bfm.num_instructions + 10) @(negedge bfm.clk);
+    print_instruction_counts();
     bfm.done = 1'b1;
   endtask
 

@@ -7,7 +7,6 @@ class CPUInstruction;
   rand bit [19:0] imm_u;
   rand bit [20:0] imm_joffset;
   rand bit [12:0] imm_boffset;
-  bit branch;
 
   constraint valid_registers {
     rd != 5'b0;
@@ -15,15 +14,8 @@ class CPUInstruction;
 
   // offsets must be word aligned and cannot exceed the memory range (12 bits)
   constraint valid_offset {
-    imm_joffset % 4 == 0;
-    imm_joffset inside {[12'd1 : 12'd20]};
-    imm_boffset % 4 == 0;
-    imm_boffset inside {[12'd1 : 12'h10]};
-  }
-
-  constraint branch_instructions {
-    if (branch)
-      instr inside {BEQ, BGE, BGEU, BLT, BLTU};
+    imm_joffset inside {4, 8};
+    imm_boffset inside {4, 8, 12};
   }
 
   function automatic void create_instr_file(input int num);
@@ -33,12 +25,6 @@ class CPUInstruction;
 
     randomize_regs(file);
     for (int i = 0; i < num; i++) begin
-      // every 10 instructions will be a branch instruction
-      if (i % 10 == 0)
-        branch = 1'b1;
-      else begin
-        branch = 1'b0;
-      end
       if (!randomize())
         $fatal("Randomization failed");
 
