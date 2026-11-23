@@ -1,11 +1,6 @@
 class branch_coverage extends coverage;
   `uvm_component_utils(branch_coverage);
 
-  function new(string name, uvm_component parent);
-    super.new(name, parent);
-    cg_branch = new();
-  endfunction
-
   local instr_t instr;
   covergroup cg_branch;
     coverpoint instr {
@@ -17,6 +12,12 @@ class branch_coverage extends coverage;
       bins bltu = {BLTU};
     }
   endgroup
+
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
+    cg_branch = new();
+  endfunction
+
 
   task run_phase(uvm_phase phase);
     phase.raise_objection(this);

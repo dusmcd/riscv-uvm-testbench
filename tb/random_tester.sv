@@ -12,7 +12,7 @@ class random_tester extends uvm_component;
     if (!uvm_config_db #(virtual cpu_bfm)::get(null, "*", "bfm", bfm))
       $fatal("Failed to get BFM");
     
-    bfm.num_instructions = 300;
+    bfm.num_instructions = 2000;
   endfunction
 
   function void print_instruction_counts();

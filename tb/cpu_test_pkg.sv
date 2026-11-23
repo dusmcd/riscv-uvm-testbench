@@ -5,8 +5,11 @@ package cpu_test_pkg;
 
   `include "random_tester.sv"
   `include "raw_tester.sv"
+  `include "branch_tester.sv"
   `include "coverage.sv"
+  `include "branch_coverage.sv"
   `include "scoreboard.sv"
   `include "random_test.sv"
   `include "raw_test.sv"
+  `include "branch_test.sv"
 endpackage

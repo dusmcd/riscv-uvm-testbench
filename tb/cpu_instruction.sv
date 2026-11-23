@@ -26,13 +26,13 @@ class CPUInstruction;
   constraint no_branch {
     if (generate_branch)
       instr dist {
-        JAL := 2,
-        BEQ := 2,
-        BGE := 2,
-        BGEU := 2,
-        BLT := 2,
-        BLTU := 2,
-        [ADD:LUI] :/ 88
+        JAL := 15,
+        BEQ := 15,
+        BGE := 15,
+        BGEU := 15,
+        BLT := 15,
+        BLTU := 15,
+        [ADD:LUI] :/ 10
       };
     else
       instr inside {[ADD:LUI]};
