@@ -25,7 +25,15 @@ class CPUInstruction;
 
   constraint no_branch {
     if (generate_branch)
-      instr inside {[JAL:BLTU]};
+      instr dist {
+        JAL := 2,
+        BEQ := 2,
+        BGE := 2,
+        BGEU := 2,
+        BLT := 2,
+        BLTU := 2,
+        [ADD:LUI] :/ 88
+      };
     else
       instr inside {[ADD:LUI]};
   }
@@ -36,6 +44,12 @@ class CPUInstruction;
       $fatal("Could not create file");
 
     randomize_regs(file);
+    generate_branch = 1'b1;
+    for (int i = 0; i < num; i++) begin
+      if (!randomize())
+        $fatal("Randomization failed");
+      $fdisplay(file, "%h", encode_instr());
+    end
 
     $fclose(file);
 

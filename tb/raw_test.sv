@@ -1,6 +1,7 @@
 class raw_test extends random_test;
   `uvm_component_utils(raw_test);
   raw_tester tester_i;
+  coverage coverage_i;
 
   function new (string name, uvm_component parent);
     super.new(name, parent);
