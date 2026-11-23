@@ -7,6 +7,7 @@ class CPUInstruction;
   rand bit [19:0] imm_u;
   rand bit [20:0] imm_joffset;
   rand bit [12:0] imm_boffset;
+  bit generate_branch;
 
   constraint valid_registers {
     rd != 5'b0;
@@ -18,12 +19,35 @@ class CPUInstruction;
     imm_boffset inside {4, 8, 12};
   }
 
+  constraint limit_jumps {
+    
+  }
+
+  constraint no_branch {
+    if (generate_branch)
+      instr inside {[JAL:BLTU]};
+    else
+      instr inside {[ADD:LUI]};
+  }
+
+  function automatic void create_branch_instr_file(input int num);
+    int file = $fopen("tb_instructions.txt", "w");
+    if (file == 0)
+      $fatal("Could not create file");
+
+    randomize_regs(file);
+
+    $fclose(file);
+
+  endfunction
+
   function automatic void create_instr_file(input int num);
     int file = $fopen("tb_instructions.txt", "w");
     if (file == 0)
       $fatal("Could not create file");
 
     randomize_regs(file);
+    generate_branch = 1'b0;
     for (int i = 0; i < num; i++) begin
       if (!randomize())
         $fatal("Randomization failed");
